@@ -1,0 +1,33 @@
+#!/bin/bash
+
+cfg="/etc/pam.d/login"
+
+conf_line_re='session\s\+optional\s\+pam_motd\.so'
+new_conf='session optional pam_motd.so\
+session optional pam_motd.so motd=/run/motd.dynamic'
+
+case "$1" in
+    configure)
+        # Set up judoka face as motd
+        cat /usr/share/kano-motd/judoka.txt >/etc/motd
+
+        # Clear dynamic motd
+        echo -n "" >/var/run/motd.dynamic
+
+        # Disable the old motd service
+        update-rc.d -f motd remove 2>/dev/null >/dev/null
+
+        # Enable the new motd service
+        update-rc.d update-motd defaults 2>/dev/null >/dev/null
+
+        # Comment-out the old motd configuration
+        sed -i "s/^\($conf_line_re\)/#\1/" $cfg
+
+        # Insert the new config right after the old, commented one
+        sed -i "N; /^#${conf_line_re}.*\n#${conf_line_re}/a $new_conf" $cfg
+        ;;
+esac
+
+#DEBHELPER#
+
+exit 0

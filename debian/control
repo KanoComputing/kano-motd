@@ -1,0 +1,13 @@
+Source: kano-motd
+Maintainer: Radek Pazdera <radek@kano.me>
+Section: admin
+Priority: optional
+Standards-Version: 3.9.4
+Build-Depends: debhelper (>=8.0.0)
+
+Package: kano-motd
+Architecture: all
+Depends: ${shlibs:Depends}, ${misc:Depends}, nano, login (>=1:4.1.5.1-1), initscripts
+Description: Easily editable dynamic MOTD messages
+ This package provides an easy-to-use MOTD editing system with static
+ and dynamic parts.
