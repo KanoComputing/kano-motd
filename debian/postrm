@@ -8,6 +8,7 @@ case "$1" in
     remove|upgrade)
         # Clear motd
         echo -n "" >/etc/motd
+        echo -n "" >/var/run/motd.dynamic
 
         # Disable our motd service
         update-rc.d -f update-motd remove 2>/dev/null >/dev/null

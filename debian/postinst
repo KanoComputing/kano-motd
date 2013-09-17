@@ -8,8 +8,8 @@ session optional pam_motd.so motd=/run/motd.dynamic'
 
 case "$1" in
     configure)
-        # Set up judoka face as motd
-        cat /usr/share/kano-motd/judoka.txt >/etc/motd
+        # Judoka face is off by default
+        echo -n "" >/etc/motd
 
         # Clear dynamic motd
         echo -n "" >/var/run/motd.dynamic
