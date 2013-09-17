@@ -1,0 +1,109 @@
+#!/bin/bash
+
+# Author: Radek Pazdera <radek@kano.me>
+
+static_motd="/etc/motd"
+motd_dir="/etc/motd.d"
+share_dir="/usr/share/kano-motd"
+
+function usage
+{
+    echo "Usage: kano-motd <command>"
+    echo "  Commands:"
+    echo "     list           list the current MOTD"
+    echo "     preview <name> preview a MOTD message with the static part"
+    echo "     judoka yes|no  toggle judoka face in MOTD"
+    echo "     add <name>     add new MOTD text"
+    echo "     edit <name>    edit existing MOTD"
+    echo "     del <name>     remove existing MOTD"
+    echo ""
+
+    exit $1
+}
+
+function get_file
+{
+    local filename="$1"
+    local exists="$2"
+
+    if [ -z "$filename" ]; then
+        echo -e "ERROR: Message name required.\n"
+        usage 1
+    fi
+
+    file="$motd_dir/$filename"
+
+    if [ "$exists" == "yes" ] && [ ! -f "$file" ]; then
+        echo "ERROR: Message '$filename' not found."
+        exit 1
+    elif [ "$exists" == "no" ] && [ -f "$file" ]; then
+        echo "ERROR: Message '$filename' already exists."
+        exit 1
+    fi
+}
+
+# Check for root priviledges.
+if [ `id -u` -ne 0 ]; then
+    echo "ERROR: kano-motd must be executed with root privileges"
+    exit 1
+fi
+
+if [ -z "$1" ]; then
+    echo -e "ERROR: No action specified.\n"
+    usage 1
+fi
+
+case "$1" in
+    "list")
+        list=`ls -1 "$motd_dir"`
+        if [ -z "$list" ]; then
+            echo "No dynamic messages found."
+        else
+            echo "$list"
+        fi
+        ;;
+
+    "random")
+        if [ -n "`ls "$motd_dir"`" ]; then
+            cat "$motd_dir/`ls -1 "$motd_dir" | sort -R | head -1`"
+            echo ""
+        fi
+        ;;
+
+    "preview")
+        get_file "$2" "yes"
+
+        cat "$static_motd" "$file"
+        ;;
+
+    "add")
+        get_file "$2" "no"
+        nano "$file"
+        ;;
+
+    "edit")
+        get_file "$2" "yes"
+        nano "$file"
+        ;;
+
+    "del")
+        get_file "$2" "yes"
+        rm -f "$file"
+        ;;
+    "judoka")
+        if [ "$2" == "yes" ]; then
+            cat "$share_dir/judoka.txt" >"$static_motd"
+        elif [ "$2" == "no" ]; then
+            echo -n "" >"$static_motd"
+        else
+            echo -e "ERROR: Either 'yes' or 'no' is required.\n"
+            usage 1
+        fi
+        ;;
+    *)
+        echo -e "ERROR: Unknown action '$1'.\n"
+        usage 1
+        ;;
+esac
+
+exit 0
