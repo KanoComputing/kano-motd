@@ -2,6 +2,7 @@
 
 cfg="/etc/pam.d/login"
 
+last_msg_re='session\s\+optional\s\+pam_lastlog\.so'
 conf_line_re='session\s\+optional\s\+pam_motd\.so'
 
 case "$1" in
@@ -21,6 +22,10 @@ case "$1" in
 
         # Uncomment the old configuration entries
         sed -i "s/^#\(${conf_line_re}\)/\1/" $cfg
+
+        # Enable the last login message printed by pam
+        sed -i "s/^#\(${last_msg_re}\)/\1/" $cfg
+
         ;;
     purge)
         rm -rf /etc/motd.d
