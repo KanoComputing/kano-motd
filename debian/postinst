@@ -2,6 +2,7 @@
 
 cfg="/etc/pam.d/login"
 
+last_msg_re='session\s\+optional\s\+pam_lastlog\.so'
 conf_line_re='session\s\+optional\s\+pam_motd\.so'
 new_conf='session optional pam_motd.so\
 session optional pam_motd.so motd=/run/motd.dynamic'
@@ -19,6 +20,9 @@ case "$1" in
 
         # Enable the new motd service
         update-rc.d update-motd defaults 2>/dev/null >/dev/null
+
+        # Disable last login message printed by pam
+        sed -i "s/^\($last_msg_re\)/#\1/" $cfg
 
         # Comment-out the old motd configuration
         sed -i "s/^\($conf_line_re\)/#\1/" $cfg
