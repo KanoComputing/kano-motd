@@ -1,3 +1,9 @@
+kano-motd (1.0-23) unstable; urgency=low
+
+  * Package rebuilt, updated to revision ac37251b.
+
+ -- Team Kano <dev@kano.me>  Wed, 01 Jan 2014 02:43:00 +0000
+
 kano-motd (1.0-22) unstable; urgency=low
 
   * Package rebuilt, updated to revision 81889e61.
