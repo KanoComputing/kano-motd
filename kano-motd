@@ -1,6 +1,11 @@
 #!/bin/bash
 
-# Author: Radek Pazdera <radek@kano.me>
+# kano-motd
+# 
+# Copyright (C) 2014 Kano Computing Ltd.
+# License: http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+#
+#
 
 static_motd="/etc/motd"
 motd_dir="/etc/motd.d"
