@@ -1,3 +1,9 @@
+kano-motd (2.2.0-1) unstable; urgency=low
+
+  * New version scheme.
+
+ -- Team Kano <dev@kano.me>  Tue, 13 Oct 2015 10:29:00 +0100
+
 kano-motd (1.1-1) unstable; urgency=low
 
   * Reviewing for release.
